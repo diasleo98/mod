@@ -24,7 +24,7 @@ import {
   TerminalNameDiv,
   TerminalName
 } from "./_styled";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export default function Terminal() {
   const router = useRouter();
@@ -38,16 +38,17 @@ export default function Terminal() {
 //     { id:2, name: "b", city: "curitiba", code: "7", priority: "LOW", country:"EUA", state:"Parana", region:"GT" },
 //     { id:3, name: "c", city: "curitiba", code: "657", priority: "MID", country:"IT", state:"Parana", region:"GT" }
 //  ]);
-  useCallback(function correctData(data) {
-    return data.id == terminalId;
-  }, [filtered]);
-
   function correctData(data) {
     return data.id == terminalId;
   }
+  useEffect(()=> {
+    setFiltered(data);
+  }, [filtered])
   
+  const ft = useRef(filtered);
+
   console.log("data", data);
-  console.log("filtered", filtered);
+  console.log("filtered", ft.current[0]);
   // setData()
 
   //console.log(router.query);
@@ -73,15 +74,21 @@ export default function Terminal() {
           <h1>Site Operations</h1>
           <h2>Site Operations Manager</h2>
           <CardText>Leonardo Dias</CardText>
-          <h2>Address</h2>
-          <CardText>Terminal: {terminalId}</CardText>
-          <CardText>Name: {filtered[0].name}</CardText>
+          <h2>Mailing</h2>
+          <CardText>Mailing Address 1: {filtered[0].ad1}</CardText>
+          <CardText>Mailing Address 2: {filtered[0].ad2}</CardText>
+          <CardText>ZIP Code: {filtered[0].zip}</CardText>
           <CardText>Ciy: {filtered[0].city}</CardText>
-          <CardText>Code: {filtered[0].code}</CardText>
-          <CardText>Priority: {filtered[0].priority}</CardText>
+          <CardText>State/Prov.: {filtered[0].city}</CardText>
           <CardText>Country: {filtered[0].country}</CardText>
-          <CardText>State: {filtered[0].state}</CardText>
           <CardText>Region: {filtered[0].region}</CardText>
+          <h2>Shipping</h2>
+          <CardText>Shipping Address 1: {filtered[0].sad1}</CardText>
+          <CardText>Shipping Address 2: {filtered[0].sad2}</CardText>
+          <CardText>Shipping ZIP Code: {filtered[0].szip}</CardText>
+          <CardText>Shipping Ciy: {filtered[0].scity}</CardText>
+
+
           
           
         </Content>
