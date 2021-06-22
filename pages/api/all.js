@@ -46,6 +46,7 @@ function queryDatabase() {
       } else {
         console.log(`${rowCount} row(s) returned`);
         totalRows = rowCount;
+        res.status(200).json(jsonArray)
         
       }
     }
@@ -62,7 +63,7 @@ function queryDatabase() {
 
    connection.execSql(request);
 }
-res.status(200).json(jsonArray)
+
 //console.log(jsonArray);
 
 
