@@ -59,7 +59,7 @@ export const Content = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    background: red;
+    background: white;
     /* grid-row: 2;
     grid-column: 2; */
     grid-area: content;
@@ -86,7 +86,20 @@ export const Card = styled.div`
 
 
 `;
+export const TextList = styled.ul`
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+
+  li{
+
+  }
+
+`;
+
 export const CardText = styled.div`
+    display: inline-block;
     margin: 2px 10px;
     font-size: large;
     flex-wrap: wrap;

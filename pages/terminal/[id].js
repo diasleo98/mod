@@ -7,6 +7,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import MainHeader from "../../components/main-header";
 import classes from "./[id].module.css";
+
 import {
   Container,
   Titulo,
@@ -22,7 +23,8 @@ import {
   MenuButton,
   CardText,
   TerminalNameDiv,
-  TerminalName
+  TerminalName,
+  TextList
 } from "./_styled";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -30,9 +32,10 @@ export default function Terminal() {
   const router = useRouter();
   const terminalId = router.query.id;
   console.log("id", terminalId)
-
   const { data, setData } = useData();
-  const [filtered, setFiltered] = useState(data.filter(correctData));
+  var result = data.filter(correctData);
+  console.log(result[0]);
+  const [filtered, setFiltered] = useState(result[0]);
 //   const [filtered, setFiltered] = useState([
 //     { id:1, name: "a", city: "curitiba", code: "12", priority: "HIGH", country:"Brasil", state:"Parana", region:"GT", extra: "escondido"},
 //     { id:2, name: "b", city: "curitiba", code: "7", priority: "LOW", country:"EUA", state:"Parana", region:"GT" },
@@ -41,14 +44,8 @@ export default function Terminal() {
   function correctData(data) {
     return data.id == terminalId;
   }
-  useEffect(()=> {
-    setFiltered(data);
-  }, [filtered])
-  
-  const ft = useRef(filtered);
-
   console.log("data", data);
-  console.log("filtered", ft.current[0]);
+  console.log("filtered", filtered);
   // setData()
 
   //console.log(router.query);
@@ -62,7 +59,7 @@ export default function Terminal() {
         <Header></Header>
         <NavBar>
           <TerminalNameDiv>
-            <TerminalName>{filtered[0].name}</TerminalName>
+            <TerminalName>{filtered.terminalName}</TerminalName>
           </TerminalNameDiv>
           <MenuButton>Site Operations</MenuButton>
           <MenuButton>Contacts</MenuButton>
@@ -73,24 +70,105 @@ export default function Terminal() {
         <Content>
           <h1>Site Operations</h1>
           <h2>Site Operations Manager</h2>
-          <CardText>Leonardo Dias</CardText>
+          <CardText>{filtered.manager}</CardText>
           <h2>Mailing</h2>
-          <CardText>Mailing Address 1: {filtered[0].ad1}</CardText>
-          <CardText>Mailing Address 2: {filtered[0].ad2}</CardText>
-          <CardText>ZIP Code: {filtered[0].zip}</CardText>
-          <CardText>Ciy: {filtered[0].city}</CardText>
-          <CardText>State/Prov.: {filtered[0].city}</CardText>
-          <CardText>Country: {filtered[0].country}</CardText>
-          <CardText>Region: {filtered[0].region}</CardText>
+          <TextList>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Mailing Address 1:</CardText>
+              <CardText>{filtered.ma1}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Mailing Address 2:</CardText>
+              <CardText>{filtered.ma2}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>ZIP Code:</CardText>
+              <CardText>{filtered.zip}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>State/Prov.:</CardText>
+              <CardText>{filtered.state}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Country:</CardText>
+              <CardText>{filtered.country}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Region:</CardText>
+              <CardText>{filtered.region}</CardText>
+            </li>
+
+          </TextList>
           <h2>Shipping</h2>
-          <CardText>Shipping Address 1: {filtered[0].sad1}</CardText>
-          <CardText>Shipping Address 2: {filtered[0].sad2}</CardText>
-          <CardText>Shipping ZIP Code: {filtered[0].szip}</CardText>
-          <CardText>Shipping Ciy: {filtered[0].scity}</CardText>
+          <TextList>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Shipping Address 1:</CardText>
+              <CardText>{filtered.sa1}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Shipping Address 2:</CardText>
+              <CardText>{filtered.sa2}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Shipping ZIP Code:</CardText>
+              <CardText>{filtered.szip}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Shipping Ciy:</CardText>
+              <CardText>{filtered.scity}</CardText>
+            </li>
+          </TextList>
+          <h2>Details</h2>
+          <TextList>
+          <TextList>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Status:</CardText>
+              <CardText>{filtered.status}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Co-located:</CardText>
+              {filtered.coRef &&
+                <input type="checkbox" checked={true}></input>
+              }
+              {filtered.coRef == false &&
+                <input type="checkbox" checked={false}></input>
+              }
+              
+              
+              
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Priority</CardText>
+              <CardText>{filtered.priority}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Ownership:</CardText>
+              <CardText>{filtered.ownership}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Run By:</CardText>
+              <CardText>{filtered.runBy}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Function:</CardText>
+              <CardText>{filtered.function}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Timezone:</CardText>
+              <CardText>{filtered.tz}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Language:</CardText>
+              <CardText>{filtered.language}</CardText>
+            </li>
+            <li>
+              <CardText style={{fontWeight:"bold"}}>Site Phone:</CardText>
+              <CardText>{filtered.phone}</CardText>
+            </li>
+          </TextList>
+          </TextList>
 
-
-          
-          
+           
         </Content>
       </Grid>
     </div>

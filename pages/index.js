@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useData } from "../contexts/dataContext";
 import Head from "next/head";
 import Image from "next/image";
@@ -13,28 +13,92 @@ import DataTable from '../components/dataTable';
 
 
 export default function Home() {
+  
+  const { data, setData } = useData([]);
+  const [sourceData, setSourceData] = useState([]);
+  useEffect(async ()=> {
 
-  const { data, setData } = useData();
-  // var { data, setData } = useContext(DataContext);
-  // console.log(data);
-  // setData(7);
-  // console.log(data);
-  var [sourceData, setSourceData] = useState(data);
-  var [filterSelected, setFilter] = useState("name");
- 
-  console.log("defined", sourceData);
+
+    var source = [];
+    while(source.length == 0){
+    const response = await fetch('http://localhost:3001/api/all');
+    const jsonResult = await response.json();
+    console.log(jsonResult);
+    source = jsonResult.map((event) => ({
+      id : event.ID, 
+      terminalName: event.terminalName, 
+      code: event.siteCode, 
+      priority: event.terminalFocus, 
+      city: event.city, 
+      country: event.country, 
+      state: event.region, 
+      region : event.region, 
+      manager: event.siteManager,
+      ma1: event.address1,
+      ma2: event.address2,
+      zip: event.terminalZip,
+      sa1: event.shippingAddress1,
+      sa2: event.shippingAddress2,
+      szip: event.shippingZip,
+      scity: event.shippingCity,
+      status: event.status,
+      coRef: event.coLocatedRef,
+      ownership: event.ownership,
+      runBy: event.runBy,
+      function: event.function,
+      tz: event.terminalTimeZone,
+      language: event.terminalLanguage,
+      phone: event.emergencyPhone,
+      comments: event.comments,
+      url: event.url,
+      attachments: event.Attachments,
+      
+      }));
+    }
+      setData(source);
+      setSourceData(source);
+
+    console.log("sourceData", sourceData);
+    console.log("data", data);
+    }
+    // fetch('http://localhost:3001/api/all')
+    //   .then(response => response.json())
+    //   .then(result => setData(result.map((event) => ({
+    //       id : event.ID, 
+    //       terminalName: event.terminalName, 
+    //       code: event.siteCode, 
+    //       priority: event.terminalFocus, 
+    //       city: event.city, 
+    //       country: event.country, 
+    //       state: event.region, 
+    //       region : event.region, 
+    //       manager: event.siteManager,
+    //       ma1: event.address1,
+    //       ma2: event.address2,
+    //       zip: event.terminalZip,
+    //       sa1: event.shippingAddress1,
+    //       sa2: event.shippingAddress2,
+    //       szip: event.shippingZip,
+    //       scity: event.shippingCity,
+    //       status: event.status,
+    //       coRef: event.coLocatedRef,
+    //       ownership: event.ownership,
+    //       runBy: event.runBy,
+    //       function: event.function,
+    //       tz: event.terminalTimeZone,
+    //       language: event.terminalLanguage,
+    //       phone: event.emergencyPhone,
+    //       comments: event.comments,
+    //       url: event.url,
+    //       attachments: event.Attachments,
+          
+    //       }))))}
+        ,[])
+        
+  const [filterSelected, setFilter] = useState("name");  
+  
   console.log("filterDefined", filterSelected);
-  // const handleClick = useCallback(() => {
-  //   setData([{first:1},{sec:2}])
-  //   console.log('dado', data)
-  // }, [setData, data])
-
-  // function teste() {
-  //   setData(data + 1)
-  //   console.log('recriado')
-  // }
-  //console.log(data);
-
+  
   function rs(event){
     console.log(event.target.value);
     var filtered = data.filter(correctData);
@@ -47,7 +111,8 @@ export default function Home() {
     function correctData(data, eq) {
       console.log(filterSelected);
       if(filterSelected == "name"){
-        return data.name.toLowerCase().includes(event.target.value.toLowerCase());
+        console.log(event.target.value.toLowerCase());
+        return data.terminalName.toLowerCase().includes(event.target.value.toLowerCase());
       }
       else if(filterSelected == "sitecode"){
         console.log("code");
