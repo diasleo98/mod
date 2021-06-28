@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 const { Connection, Request } = require("tedious");
-var totalRows;
 var jsonArray = [];
 
 async function query(req, res) {
@@ -45,7 +44,6 @@ function queryDatabase() {
         console.error(err.message);
       } else {
         console.log(`${rowCount} row(s) returned`);
-        totalRows = rowCount;
         res.status(200).json(jsonArray)
         
       }

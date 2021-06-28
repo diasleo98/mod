@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router'
 import { useData } from "../../contexts/dataContext";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -27,28 +27,74 @@ import {
   TextList
 } from "./_styled";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { GetTerminal } from "../../service/server";
 
-export default function Terminal() {
+function Page() {
+
   const router = useRouter();
-  const terminalId = router.query.id;
-  console.log("id", terminalId)
-  const { data, setData } = useData();
-  var result = data.filter(correctData);
-  console.log(result[0]);
-  const [filtered, setFiltered] = useState(result[0]);
-//   const [filtered, setFiltered] = useState([
-//     { id:1, name: "a", city: "curitiba", code: "12", priority: "HIGH", country:"Brasil", state:"Parana", region:"GT", extra: "escondido"},
-//     { id:2, name: "b", city: "curitiba", code: "7", priority: "LOW", country:"EUA", state:"Parana", region:"GT" },
-//     { id:3, name: "c", city: "curitiba", code: "657", priority: "MID", country:"IT", state:"Parana", region:"GT" }
-//  ]);
-  function correctData(data) {
-    return data.id == terminalId;
-  }
-  console.log("data", data);
-  console.log("filtered", filtered);
-  // setData()
+  //const terminalId = router.query.id;
+  const { data, setData, filtered, setFiltered } = useData();
 
-  //console.log(router.query);
+  console.log("Id alert: " + router);
+  var result = data.filter((data) => data.id == router.query.id);
+  //setFiltered(result[0]);
+
+    useEffect(async () => {
+      if(Object.keys(filtered).length == 0){
+        var source = await GetTerminal(2);
+        setFiltered(source);
+        console.log(filtered);
+      }
+      else{
+        setFiltered(result[0])
+      }
+    }, [])
+
+  
+  
+  // useEffect(async () => {
+  //   console.log("aqui",filtered);
+  //   if(filtered == undefined ){
+  //     const response = await fetch(`http://localhost:3000/api/terminal/${router.query.id}`);
+  //     const jsonResult = await response.json();
+  //     console.log(jsonResult);
+  //     source = jsonResult.map((event) => ({
+  //       id : event.ID, 
+  //       terminalName: event.terminalName, 
+  //       code: event.siteCode, 
+  //       priority: event.terminalFocus, 
+  //       city: event.city, 
+  //       country: event.country, 
+  //       state: event.region, 
+  //       region : event.region, 
+  //       manager: event.siteManager,
+  //       ma1: event.address1,
+  //       ma2: event.address2,
+  //       zip: event.terminalZip,
+  //       sa1: event.shippingAddress1,
+  //       sa2: event.shippingAddress2,
+  //       szip: event.shippingZip,
+  //       scity: event.shippingCity,
+  //       status: event.status,
+  //       coRef: event.coLocatedRef,
+  //       ownership: event.ownership,
+  //       runBy: event.runBy,
+  //       function: event.function,
+  //       tz: event.terminalTimeZone,
+  //       language: event.terminalLanguage,
+  //       phone: event.emergencyPhone,
+  //       comments: event.comments,
+  //       url: event.url,
+  //       attachments: event.Attachments,
+        
+  //       }));
+  //       filtered = source;
+  //       }
+        
+  // }, [filtered]);
+
+
+
   function click() {
     console.log("meu clicked");
     router.push("../grid/leo");
@@ -190,3 +236,5 @@ export default function Terminal() {
 //         <div>Region: {filtered[0].region}</div>
 //     </section>
 // </section>
+
+export default Page

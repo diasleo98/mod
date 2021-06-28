@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { useData } from "../contexts/dataContext";
 import {useRouter} from 'next/router';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 
@@ -17,9 +18,9 @@ const columns = [
 ];
 
 export default function DataTable(props) {
-    const { data, setData } = useData();
+    const { data, setData, loading } = useData();
     const rows = data;
-    
+  
     const router = useRouter();
     function click(params){
         console.log("click", params);
@@ -29,7 +30,14 @@ export default function DataTable(props) {
     
     return (
         <div style={{ height: "75vh", width: '100%' }}>
-      <DataGrid stickyHeader onRowClick={click} rows={props.source} columns={columns} pageSize={100} />
+      <DataGrid loading={loading} stickyHeader onRowClick={click} rows={props.source} columns={columns} pageSize={100}></DataGrid>
+      {/* {loading && 
+        <CircularProgress/>
+      }
+      {loading ?  
+        <CircularProgress/> : 
+        <label>OIE</label>
+      } */}
     </div>
   );
 }
