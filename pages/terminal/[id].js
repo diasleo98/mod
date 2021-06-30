@@ -92,9 +92,6 @@ function Page() {
   //       }
         
   // }, [filtered]);
-
-
-
   function click() {
     console.log("meu clicked");
     router.push("../grid/leo");
