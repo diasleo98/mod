@@ -10,70 +10,75 @@ import styles from "../styles/Home.module.css";
 import Button from '@material-ui/core/Button';
 import DataTable from '../components/dataTable';
 import { Grid, Header, Search, Table, Loader } from "./_styled";
+import Link from 'next/link';
 
 
 
-export default function Home() {
+export default function Home(props) {
   
   const { data, setData, loading, setLoading } = useData([]);
   const [sourceData, setSourceData] = useState([]);
 
   useEffect(async ()=> {
-    var source = [];
-    if(data.length > 0){
-      setSourceData(data);
-      source = data;
-    }
+    setLoading(true);
+    setSourceData(props.data);
+    setData(props.data);
+    setLoading(false);
+  //   var source = [];
+  //   if(data.length > 0){
+  //     setSourceData(data);
+  //     source = data;
+  //   }
 
-    while(source.length == 0){
-        setLoading(true);
-        const response = await fetch('http://localhost:3000/api/all');
-        const jsonResult = await response.json();
-        console.log(jsonResult);
-        source = jsonResult.map((event) => ({
-          id : event.ID, 
-          terminalName: event.terminalName, 
-          code: event.siteCode, 
-          priority: event.terminalFocus, 
-          city: event.city, 
-          country: event.country, 
-          state: event.region, 
-          region : event.region, 
-          manager: event.siteManager,
-          ma1: event.address1,
-          ma2: event.address2,
-          zip: event.terminalZip,
-          sa1: event.shippingAddress1,
-          sa2: event.shippingAddress2,
-          szip: event.shippingZip,
-          scity: event.shippingCity,
-          status: event.status,
-          coRef: event.coLocatedRef,
-          ownership: event.ownership,
-          runBy: event.runBy,
-          function: event.function,
-          tz: event.terminalTimeZone,
-          language: event.terminalLanguage,
-          phone: event.emergencyPhone,
-          comments: event.comments,
-          url: event.url,
-          attachments: event.Attachments,
+  //   while(source.length == 0){
+  //       setLoading(true);
+  //       const response = await fetch('http://localhost:3000/api/all');
+  //       const jsonResult = await response.json();
+  //       console.log(jsonResult);
+  //       source = jsonResult.map((event) => ({
+  //         id : event.ID, 
+  //         terminalName: event.terminalName, 
+  //         code: event.siteCode, 
+  //         priority: event.terminalFocus, 
+  //         city: event.city, 
+  //         country: event.country, 
+  //         state: event.region, 
+  //         region : event.region, 
+  //         manager: event.siteManager,
+  //         ma1: event.address1,
+  //         ma2: event.address2,
+  //         zip: event.terminalZip,
+  //         sa1: event.shippingAddress1,
+  //         sa2: event.shippingAddress2,
+  //         szip: event.shippingZip,
+  //         scity: event.shippingCity,
+  //         status: event.status,
+  //         coRef: event.coLocatedRef,
+  //         ownership: event.ownership,
+  //         runBy: event.runBy,
+  //         function: event.function,
+  //         tz: event.terminalTimeZone,
+  //         language: event.terminalLanguage,
+  //         phone: event.emergencyPhone,
+  //         comments: event.comments,
+  //         url: event.url,
+  //         attachments: event.Attachments,
           
-          }));
-        }
-          setData(source);
-          setSourceData(source);
-          setLoading(false);
+  //         }));
+  //       }
+  //         setData(source);
+  //         setSourceData(source);
+  //         setLoading(false);
 
-        console.log("sourceData", sourceData);
-        console.log("data", data);
+  //       console.log("sourceData", sourceData);
+  //       console.log("data", data);
         }
     
         ,[])
         
-  const [filterSelected, setFilter] = useState("name");  
+  // const [filterSelected, setFilter] = useState("name");  
   
-  console.log("filterDefined", filterSelected);
+  // console.log("filterDefined", filterSelected);
   
   function rs(event){
     console.log(event.target.value);
@@ -131,4 +136,42 @@ export default function Home() {
       </Grid>
     </div>
   );
+}
+export async function getStaticProps(context) {
+  const response = await fetch('http://localhost:3000/api/all');
+        const jsonResult = await response.json();
+        console.log("API REQUEST");
+        var source = jsonResult.map((event) => ({
+          id : event.ID, 
+          terminalName: event.terminalName, 
+          code: event.siteCode, 
+          priority: event.terminalFocus, 
+          city: event.city, 
+          country: event.country, 
+          state: event.region, 
+          region : event.region, 
+          manager: event.siteManager,
+          ma1: event.address1,
+          ma2: event.address2,
+          zip: event.terminalZip,
+          sa1: event.shippingAddress1,
+          sa2: event.shippingAddress2,
+          szip: event.shippingZip,
+          scity: event.shippingCity,
+          status: event.status,
+          coRef: event.coLocatedRef,
+          ownership: event.ownership,
+          runBy: event.runBy,
+          function: event.function,
+          tz: event.terminalTimeZone,
+          language: event.terminalLanguage,
+          phone: event.emergencyPhone,
+          comments: event.comments,
+          url: event.url,
+          attachments: event.Attachments,
+          
+          }));
+  return {
+    props: {data: source}, // will be passed to the page component as props
+  }
 }
